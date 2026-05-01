@@ -20,6 +20,7 @@ from langsmith import Client
 
 load_dotenv()
 
+
 def push_prompt_to_langsmith(prompt_name: str, prompt_data: dict) -> bool:
     """
     Faz push do prompt otimizado para o LangSmith Hub (PÚBLICO).
@@ -35,14 +36,16 @@ def push_prompt_to_langsmith(prompt_name: str, prompt_data: dict) -> bool:
         client = Client()
         prompt_content = prompt_data.get("bug_to_user_story_v2", {})
         url = client.push_prompt(
-            "bug_to_user_story_v2", 
-            object=ChatPromptTemplate.from_messages([
-                ("system", prompt_content.get("system_prompt", "")),
-                ("user", prompt_content.get("user_prompt", ""))
-            ]),
+            "bug_to_user_story_v2",
+            object=ChatPromptTemplate.from_messages(
+                [
+                    ("system", prompt_content.get("system_prompt", "")),
+                    ("user", prompt_content.get("user_prompt", "")),
+                ]
+            ),
             is_public=True,
-            tags= prompt_content.get('tags', []),
-            description=prompt_content.get('description'),
+            tags=prompt_content.get("tags", []),
+            description=prompt_content.get("description"),
         )
         print(url)
         print(f"✅ Prompt '{prompt_name}' publicado com sucesso!")
@@ -50,7 +53,6 @@ def push_prompt_to_langsmith(prompt_name: str, prompt_data: dict) -> bool:
     except Exception as e:
         print(f"❌ Erro ao publicar o prompt: {e}")
         return False
-    
 
 
 def validate_prompt(prompt_data: dict) -> tuple[bool, list]:
@@ -64,7 +66,7 @@ def validate_prompt(prompt_data: dict) -> tuple[bool, list]:
         (is_valid, errors) - Tupla com status e lista de erros
     """
     errors = []
-    
+
     prompt_content = prompt_data.get("bug_to_user_story_v2") or {}
     if not prompt_content.get("system_prompt"):
         errors.append("Campo 'system_prompt' é obrigatório e não pode ser vazio.")
@@ -77,20 +79,20 @@ def validate_prompt(prompt_data: dict) -> tuple[bool, list]:
 def main():
     """Função principal"""
     check_env_vars(["USERNAME_LANGSMITH_HUB"])
-    
+
     prompt_template = load_yaml("prompts/bug_to_user_story_v2.yml")
-   
+
     if not prompt_template:
         print("❌ Falha ao carregar o prompt otimizado.")
         return False
-    
+
     is_valid, errors = validate_prompt(prompt_template)
     if not is_valid:
         print("❌ Erros de validação encontrados:")
         for error in errors:
             print(f"  - {error}")
         return False
-    
+
     push_prompt_to_langsmith("mauroscl/bug_to_user_story_v2", prompt_template)
 
 
