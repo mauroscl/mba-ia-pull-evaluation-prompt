@@ -211,7 +211,7 @@ def evaluate_prompt(
                 clarity_scores.append(clarity["score"])
                 precision_scores.append(precision["score"])
 
-                print(f"      [{i}/{len(examples)}] F1:{f1['score']:.2f} Clarity:{clarity['score']:.2f} Precision:{precision['score']:.2f}")
+                print(f"      [{i}/{len(examples)}] [{result['question'][:50]}...] F1:{f1['score']:.2f} Precision(F1):{f1['precision']:.2f} Recall(F1):{f1['recall']:.2f} Clarity:{clarity['score']:.2f} Precision:{precision['score']:.2f}")
 
         avg_f1 = sum(f1_scores) / len(f1_scores) if f1_scores else 0.0
         avg_clarity = sum(clarity_scores) / len(clarity_scores) if clarity_scores else 0.0

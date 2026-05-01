@@ -36,7 +36,7 @@ def push_prompt_to_langsmith(prompt_name: str, prompt_data: dict) -> bool:
         client = Client()
         prompt_content = prompt_data.get("bug_to_user_story_v2", {})
         url = client.push_prompt(
-            "bug_to_user_story_v2",
+            prompt_name,
             object=ChatPromptTemplate.from_messages(
                 [
                     ("system", prompt_content.get("system_prompt", "")),
