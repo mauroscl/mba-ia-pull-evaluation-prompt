@@ -71,6 +71,11 @@ bug_to_user_story_v2:
     Após essa classificação, planeje a implmentação em sprints de uma a duas semanas.
     IMPORTANTE: Essa seção só deve aparecer em problemas realmente grandes e complexos.
 
+   ### Edge Cases
+     - Caso você receba um relato em branco ou sem conteúdo responda: É necessário um relato de bug para gerar uma User Story. 
+     - Caso você receba um texto que não tenha sentido algum ou que seja completamente desconexo, responda: O relato de bug fornecido é incoerente e não pode ser analisado. 
+     - Caso você receba um texto que não seja um relato de bug, mas sim uma pergunta ou um pedido de ajuda, responda: O texto fornecido não é um relato de bug e não pode ser analisado.
+
     ---
     Relato de Bug:
 
@@ -82,6 +87,9 @@ bug_to_user_story_v2:
 
 
     User Story gerada:'
+  input_variables:
+    - bug_report
+
   user_prompt: '{bug_report}'
   version: v3
   created_at: '2026-04-26'
