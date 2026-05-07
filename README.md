@@ -8,164 +8,139 @@ Este projeto implementa um pipeline completo de otimização de prompts utilizan
 
 ---
 
-## 🎯 Fluxo do Projeto
-
-```
-1. Pull Prompts (v1) → 2. Análise → 3. Refatoração (v2) → 4. Push → 5. Avaliação → 6. Iteração
-   (LangSmith)         (Baixa Q.)    (Otimização)      (LS)      (Métricas)      (até 0.9)
-```
-
----
-
 ## 🔧 Técnicas Aplicadas (Fase 2)
 
 ### Descrição das Técnicas Utilizadas
 
 | Técnica | Descrição | Por Quê? | Exemplo Aplicado |
 |---------|-----------|---------|------------------|
-| **Few-Shot Learning** | [DESCREVER: Incluir 2-3 exemplos claros de entrada/saída no prompt] | [JUSTIFICAR: Melhora drasticamente a compreensão do modelo sobre o padrão esperado] | [LINK/DESCRIÇÃO dos exemplos adicionados ao v2] |
-| **[TÉCNICA 2]** | [Chain of Thought / Tree of Thought / Skeleton of Thought / ReAct / Role Prompting] | [JUSTIFICAR: Por que escolheu esta técnica específica?] | [EXEMPLO: Como aplicou no prompt?] |
-| **[TÉCNICA 3 - OPCIONAL]** | [Se aplicável, adicione uma 3ª técnica] | [JUSTIFICAR] | [EXEMPLO] |
+| **Role Prompting** | O prompt define uma persona especialista de QA com contexto de web/mobile e foco em User Stories e critérios mensuráveis. | A persona foi usada para delimitar um nicho de conhecimento, indicar no que ela é especialista e como ela escreve as user stories. | Trechos: "Você é uma analista de qualidade (QA)..." e "Você tem vasta experiência em escrita de User Stories e definição de critérios de aceitação claros e específicos..." |
+| **Few-Shot Learning** | Foram adicionados exemplos explícitos de User Story e critérios de aceitação esperados para ancorar formato e nível de detalhe. | Reduz ambiguidade em relatos curtos e ajuda a manter consistência de estrutura e linguagem. | Exemplos de template e critérios em: `system_prompt` ("Como [Ator], eu quero [Ação]..." + bullets de critérios). |
+| **Chain of Thought (controlado)** | O prompt exige decomposição do problema (separar passos, classificar tipo de erro, tratar múltiplos problemas) e raciocínio interno com saída objetiva. | Melhora correctness em relatos complexos sem expor raciocínio, preservando resposta final limpa. | Trechos: "primeiro entenda e separe cada passo..." + "Raciocine internamente passo a passo, mas entregue apenas a resposta final." |
 
 ### Detalhamento das Técnicas
 
 #### 1. **Few-Shot Learning (OBRIGATÓRIO)**
 
 **O que foi feito:**
-- [TODO: Descrever os exemplos que você adicionou]
-- Número de exemplos: [X]
-- Cobertura de cenários: [Simples / Médio / Complexo]
+- Inclusão de exemplos de User Story bem formadas com atores distintos (usuário e sistema).
+- Inclusão de exemplos de critérios de aceitação atômicos e mensuráveis.
+- Número de exemplos no prompt: **7** (4 de User Story + 3 de critérios).
+- Cobertura de cenários: **simples, médio e técnico (integração/performance)**.
 
 **Exemplos adicionados no prompt v2:**
 ```yaml
-# [TODO: Adicionar exemplos específicos do arquivo bug_to_user_story_v2.yml]
+- Como um aluno da academia eu quero visualizar os horários de aula para que eu possa planejar minha semana de treinos.
+- Como um sistema de pagamentos, eu quero processar transações em menos de 2 segundos para que os usuários tenham uma experiência de compra fluida e sem interrupções.
+
+- O sistema deve exibir os horários de todas as aulas disponíveis na academia.
+- O sistema deve permitir filtrar os horários por tipo de aula (ex: yoga, pilates, spinning).
 ```
 
 **Impacto esperado:** Clareza no formato esperado, redução de ambiguidade
 
 ---
 
-#### 2. **[TÉCNICA ADICIONAL - Ex: Chain of Thought]**
+#### 2. **Role Prompting + Chain of Thought**
 
 **O que foi feito:**
-- [TODO: Descrever como aplicou a técnica]
-- Instruções adicionadas: [CITAR TRECHOS]
+- Definição de persona de QA sênior com escopo claro de atuação.
+- Estrutura de análise em etapas para relatos detalhados e múltiplos problemas.
+- Instrução explícita de raciocínio interno sem exposição na resposta final.
 
 **Como foi aplicado:**
 ```yaml
-# [TODO: Exemplos do prompt v2]
+### Persona e escopo
+Você é uma analista de qualidade (QA) com ampla experiência...
+
+Para relatos detalhados, primeiro entenda e separe cada passo do relato.
+Então verifique se os passos descrevem um problema único ou vários problemas...
+
+Raciocine internamente passo a passo, mas entregue apenas a resposta final.
 ```
 
-**Impacto esperado:** [EXPLICAR O IMPACTO]
-
----
-
-### Comparativo: v1 vs v2
-
-#### Prompt v1 (Baixa Qualidade)
-```yaml
-# [TODO: Incluir trecho do arquivo prompts/bug_to_user_story_v1.yml]
-```
-
-**Problemas identificados:**
-- [ ] Falta de especificidade nas instruções
-- [ ] Ausência de exemplos (Few-shot)
-- [ ] Persona não definida
-- [ ] Sem estrutura clara de saída
-- [ ] Não menciona tratamento de edge cases
-
----
-
-#### Prompt v2 (Otimizado)
-```yaml
-# [TODO: Incluir trecho do arquivo prompts/bug_to_user_story_v2.yml]
-```
-
-**Melhorias implementadas:**
-- ✅ Instruções claras e específicas
-- ✅ Exemplos de entrada/saída (Few-shot)
-- ✅ Persona bem definida (Role Prompting)
-- ✅ Estrutura explícita de saída
-- ✅ Tratamento de edge cases documentado
-- ✅ [TODO: Adicione outras melhorias específicas]
+**Impacto esperado:** melhor diagnóstico de cenários complexos, maior consistência entre saída e criticidade do bug, e ganho de precisão sem respostas longas, confusas.
 
 ---
 
 ## 📊 Resultados Finais
+A tabela comparativa tem o resultado de algumas execuções. Tem mais de uma aprovada. Se quiser você pode ver os resultados detalhados de cada exemplo no link em cada linha. Tomei a liberdade de adicionar mais detalhes em relação ao log original para facilitar a análise. O que foi incluido:
+- 50 primeiros caracteres do input
+- detalhamento das métricas utilizadas para calcular o f1 (precision, recall)
 
-### Métricas de Avaliação
-
-#### Avaliação Prompt v1 (Baseline)
-```
-Prompt: {seu_username}/bug_to_user_story_v1
-==================================================
-Métricas Derivadas:
-  - Helpfulness: [TODO: 0.XX] ✗
-  - Correctness: [TODO: 0.XX] ✗
-
-Métricas Base:
-  - F1-Score: [TODO: 0.XX] ✗
-  - Clarity: [TODO: 0.XX] ✗
-  - Precision: [TODO: 0.XX] ✗
-
-❌ STATUS: REPROVADO
+Ficou assim:
+```log
+      [14/15] [Campo de email aceita texto sem @, permitindo cada...] F1:1.00 Precision(F1):1.00 Recall(F1):1.00 Clarity:0.98 Precision:1.00
+      [15/15] [Botão de adicionar ao carrinho não funciona no pro...] F1:1.00 Precision(F1):1.00 Recall(F1):1.00 Clarity:0.90 Precision:0.97
 ```
 
----
+Evolução:  
+Minhas maiores dificuldades foram com a métrica de recall no F1. Dada a boa diferença entre os exemplos foi dificil encontrar um equilibrio para não melhorar o recall e prejudicar outras métricas como precisão ou clareza. A maioria das avaliações não passou por causa do F1. Não mostrei todas, pois algumas mudanças que eu ia fazendo acabavam diminuindo a avaliação ao invés de melhorar.  Optei por mostrar somente quando havia alguma evolução.
 
-#### Avaliação Prompt v2 (Otimizado)
-```
-Prompt: {seu_username}/bug_to_user_story_v2
-==================================================
-Métricas Derivadas:
-  - Helpfulness: [TODO: ≥0.90] ✅
-  - Correctness: [TODO: ≥0.90] ✅
+Tentei decompor o problema em alguns momentos. Ao invés de enviar todos os exemplos estava enviados os 5 primeiros que eram mais simples. A ideia era fazer passar para os 5 primeiros e depois que passasse para estes primeiros ir incluindo mais exemplos até chegar nos 15. Não deu muito certo:   ficava bom para os primeiros, mas quando inseria os próximos, ajustava para os próximos e voltava a penalizar os primeiros. Como não deu muito certo, comecei a olhar mais para o reasoning do Langsmith. Coloquei todos os reasoning com nota bem baixa para ver o que eles tinham em comum. Esses passos intermediários eu nem registrei aqui. Ficaria muito verboso. Só estou relatando.  
 
-Métricas Base:
-  - F1-Score: [TODO: ≥0.90] ✅
-  - Clarity: [TODO: ≥0.90] ✅
-  - Precision: [TODO: ≥0.90] ✅
+Por fim, da V3 para a V4 eu tentei fazer uma melhoria que teve um efeito colateral: aumentou bastante a avaliação do recall, mas diminui o precision, o que penalizou novamente o F1. Então fiz mais alguns ajustes até chegar no score que está detalhado.
 
-✅ STATUS: APROVADO - Todas as métricas >= 0.9
-```
-
-**Iterações realizadas:** [TODO: Número de iterações até atingir 0.9 em todas]
-
----
+Aqui está o print da última execução:
+![v4 aprovada](screenshots/prompt-aprovado-ultima-versao.png)
+Você também pode conferir direto no [log](logs/eval-v4-aprovado.log)
 
 ### Tabela Comparativa
 
-| Métrica | v1 | v2 | Melhoria | Status |
-|---------|-----|------|---------|--------|
-| Helpfulness | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
-| Correctness | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
-| F1-Score | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
-| Clarity | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
-| Precision | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
-| **MÉDIA** | [TODO] | [TODO] | [TODO: +X%] | ❌/✅ |
+| Execução | Log | Helpfulness | Correctness | F1-Score | Clarity | Precision | Média Geral | Status |
+|----------|-----|-------------|-------------|----------|---------|-----------|-------------|--------|
+| v1 | [eval-v1-reprovado.log](logs/eval-v1-reprovado.log) | 0.93 | 0.76 | 0.63 | 0.97 | 0.89 | 0.8346 | ❌ REPROVADO |
+| v2 | [eval-v2-aprovado.log](logs/eval-v2-aprovado.log) | 0.93 | 0.93 | 0.92 | 0.92 | 0.95 | 0.9294 | ✅ APROVADO |
+| v3 | [eval-v3-aprovado.log](logs/eval-v3-aprovado.log) | 0.94 | 0.93 | 0.91 | 0.94 | 0.95 | 0.9331 | ✅ APROVADO |
+| v4 | [eval-v4-aprovado.log](logs/eval-v4-aprovado.log) | 0.96 | 0.95 | 0.92 | 0.95 | 0.98 | 0.9513 | ✅ APROVADO |
 
 ---
 
 ### Dashboard LangSmith
 
-**Link público do dashboard:** [TODO: Adicione o link público do seu LangSmith com as avaliações]
+**Link público do dashboard:** https://smith.langchain.com/o/e4b3dc3d-29d6-45bc-81d2-015a9916378a/projects/p/534622e9-6f7e-4d6d-a963-0665bafcf1dc
 
 **Screenshots de evidência:**
 
 1. **Visão geral das avaliações (v2):**
-   - [TODO: Adicione screenshot mostrando os scores ≥ 0.9]
+   ![Visão geral do Trace](screenshots/langhsmith-tracing-geral.png)
 
 2. **Dataset com 15 exemplos:**
-   - [TODO: Adicione screenshot do dataset bug_to_user_story.jsonl no LangSmith]
+   ![DataSet](screenshots/langhsmit-dataset.png)
 
 3. **Tracing detalhado (exemplo 1):**
-   - [TODO: Adicione screenshot do tracing de 1 execução bem-sucedida]
+   
+   __Precisão__
 
-4. **Tracing detalhado (exemplo 2):**
-   - [TODO: Adicione screenshot do tracing de outra execução]
+   ![Precisao](screenshots/langsmith-exemplo1-precisao.png)
 
-5. **Tracing detalhado (exemplo 3):**
-   - [TODO: Adicione screenshot do tracing de uma terceira execução]
+   __Clareza__
+   ![Clareza](screenshots/langsmith-exemplo1-clareza.png)
+   
+   __F1__
+   ![F1](screenshots/langsmith-exemplo1-f1.png)
+
+4. **Tracing detalhado (exemplo 2):**  
+   __Precisão__
+
+   ![Precisao](screenshots/langsmith-exemplo2-precisao.png)
+
+   __Clareza__
+   ![Clareza](screenshots/langsmith-exemplo2-clareza.png)
+
+   __F1__
+   ![F1](screenshots/langsmith-exemplo2-f1.png)
+
+5. **Tracing detalhado (exemplo 3):**  
+
+   __Precisão__
+   ![Precisao](screenshots/langsmith-exemplo3-precisao.png)
+
+   __Clareza__
+   ![Clareza](screenshots/langsmith-exemplo3-clareza.png)
+
+   __F1__
+   ![F1](screenshots/langsmith-exemplo3-f1.png)
 
 ---
 
@@ -183,7 +158,7 @@ Métricas Base:
 ### 1. Clonar o Repositório
 
 ```bash
-git clone https://github.com/{seu_username}/mba-ia-pull-evaluation-prompt.git
+git clone https://github.com/mauroscl/mba-ia-pull-evaluation-prompt.git
 cd mba-ia-pull-evaluation-prompt
 ```
 
@@ -234,6 +209,9 @@ GEMINI_MODEL=gemini-2.5-flash
 
 ### 5. Executar o Pipeline Completo
 
+Se você quiser apenas avaliar o prompt pule direto para o passo 4.
+Se você quiser publicar os prompts no seu próprio projeto do Langsmith você deve executar desde o inicio
+
 #### Passo 1: Pull dos Prompts Iniciais
 
 ```bash
@@ -267,8 +245,8 @@ python src/push_prompts.py
 
 **Saída esperada:**
 ```
-✅ Prompt enviado para LangSmith: {seu_username}/bug_to_user_story_v2
-📍 URL: https://smith.langchain.com/hub/{seu_username}/bug_to_user_story_v2
+✅ Prompt enviado para LangSmith: mauroscl/bug_to_user_story_v2
+📍 URL: https://smith.langchain.com/hub/mauroscl/bug_to_user_story_v2
 ```
 
 #### Passo 4: Avaliar os Prompts
@@ -281,7 +259,7 @@ python src/evaluate.py
 ```
 Executando avaliação dos prompts...
 ==================================================
-Prompt: {seu_username}/bug_to_user_story_v2
+Prompt: mauroscl/bug_to_user_story_v2
 ==================================================
 
 Métricas Derivadas:
@@ -391,40 +369,3 @@ Se as métricas não atingirem 0.9 em todas as dimensões:
 - **Google Gemini API:** https://ai.google.dev/
 
 ---
-
-## ✅ Checklist de Entrega
-
-- [ ] Repositório é um fork público no GitHub
-- [ ] Arquivo `prompts/bug_to_user_story_v2.yml` completamente preenchido
-- [ ] Script `src/pull_prompts.py` implementado e funcional
-- [ ] Script `src/push_prompts.py` implementado e funcional
-- [ ] Testes em `tests/test_prompts.py` todos passando
-- [ ] README.md preenchido com:
-  - [ ] Técnicas aplicadas com justificativa
-  - [ ] Comparativo v1 vs v2
-  - [ ] Link público do LangSmith
-  - [ ] Screenshots das avaliações (≥ 0.9)
-  - [ ] Instruções de execução
-- [ ] Todas as 5 métricas ≥ 0.9
-- [ ] Link público do prompt v2 no LangSmith
-
----
-
-## 🎓 Notas Adicionais
-
-- **Não altere** `src/evaluate.py`, `src/metrics.py`, `src/utils.py` ou `datasets/`
-- **Documente seu processo** - a jornada é tão importante quanto o resultado
-- **Itere com propósito** - analise as métricas antes de cada mudança
-- **Use o Tracing do LangSmith** como ferramenta de debug principal
-- **Few-Shot Learning é obrigatório** - mínimo 2-3 exemplos bem estruturados
-
----
-
-## 📧 Suporte
-
-Para dúvidas, consulte a documentação do LangSmith ou a seção "Dicas Finais" no DESAFIO.md.
-
----
-
-**Data de última atualização:** [TODO: Adicione a data]
-**Status:** [TODO: Em andamento / Concluído]

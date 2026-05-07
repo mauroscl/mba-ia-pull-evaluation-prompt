@@ -41,10 +41,6 @@ ENV/
 .pytest_cache/
 .coverage
 
-# Logs
-*.log
-
 # Project specific
-screenshots/
 results/
 .claude/

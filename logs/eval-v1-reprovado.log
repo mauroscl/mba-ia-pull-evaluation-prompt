@@ -1,0 +1,87 @@
+
+==================================================
+AVALIAÇÃO DE PROMPTS OTIMIZADOS
+==================================================
+
+Provider: google
+Modelo Principal: gemini-2.5-flash
+Modelo de Avaliação: gemini-2.5-flash
+
+Criando dataset de avaliação: prompt-optimization-challenge-resolved-eval...
+   ✓ Carregados 15 exemplos do arquivo datasets/bug_to_user_story.jsonl
+   ✓ Dataset criado com 15 exemplos
+
+======================================================================
+PROMPTS PARA AVALIAR
+======================================================================
+
+Este script irá puxar prompts do LangSmith Hub.
+Certifique-se de ter feito push dos prompts antes de avaliar:
+  python src/push_prompts.py
+
+
+🔍 Avaliando: mauroscl/bug_to_user_story_v1
+   Puxando prompt do LangSmith Hub: mauroscl/bug_to_user_story_v1
+   ✓ Prompt carregado com sucesso
+   Dataset: 15 exemplos
+/home/mauroscl/dev/mba/mba-ia-pull-evaluation-prompt/venv/lib/python3.12/site-packages/langchain_google_genai/chat_models.py:47: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  from google.generativeai.caching import CachedContent  # type: ignore[import]
+   Avaliando exemplos...
+      [1/15] [App de produtividade offline-first com bugs crític...] F1:0.94 Precision(F1):1.00 Recall(F1):0.88 Clarity:1.00 Precision:0.87
+      [2/15] [Sistema de relatórios gerenciais com problemas sev...] F1:0.94 Precision(F1):1.00 Recall(F1):0.88 Clarity:1.00 Precision:0.98
+      [3/15] [Sistema de checkout com múltiplas falhas críticas....] F1:0.33 Precision(F1):1.00 Recall(F1):0.20 Clarity:0.93 Precision:0.90
+      [4/15] [Modal de confirmação de exclusão aparece atrás do ...] F1:0.67 Precision(F1):1.00 Recall(F1):0.50 Clarity:0.80 Precision:0.92
+      [5/15] [Carrinho permite finalizar compra mesmo com produt...] F1:0.18 Precision(F1):1.00 Recall(F1):0.10 Clarity:1.00 Precision:0.73
+      [6/15] [App Android trava ao carregar lista de notificaçõe...] F1:1.00 Precision(F1):1.00 Recall(F1):1.00 Clarity:0.95 Precision:0.90
+      [7/15] [Pipeline de vendas calcula valor total errado quan...] F1:0.82 Precision(F1):1.00 Recall(F1):0.69 Clarity:1.00 Precision:1.00
+      [8/15] [Endpoint /api/users/:id retorna dados de qualquer ...] F1:0.50 Precision(F1):1.00 Recall(F1):0.33 Clarity:0.95 Precision:0.90
+      [9/15] [Relatório de vendas demora mais de 2 minutos para ...] F1:0.39 Precision(F1):0.90 Recall(F1):0.25 Clarity:0.98 Precision:0.70
+      [10/15] [Webhook de pagamento aprovado não está sendo chama...] F1:0.67 Precision(F1):1.00 Recall(F1):0.50 Clarity:0.98 Precision:0.90
+      [11/15] [Imagens de produtos não aparecem no Safari. No Chr...] F1:1.00 Precision(F1):1.00 Recall(F1):1.00 Clarity:0.98 Precision:0.87
+      [12/15] [Dashboard mostra contagem errada de usuários ativo...] F1:0.29 Precision(F1):1.00 Recall(F1):0.17 Clarity:1.00 Precision:1.00
+      [13/15] [No iOS, ao girar o celular para landscape, o layou...] F1:1.00 Precision(F1):1.00 Recall(F1):1.00 Clarity:0.97 Precision:1.00
+      [14/15] [Campo de email aceita texto sem @, permitindo cada...] F1:0.29 Precision(F1):1.00 Recall(F1):0.17 Clarity:1.00 Precision:1.00
+      [15/15] [Botão de adicionar ao carrinho não funciona no pro...] F1:0.39 Precision(F1):0.90 Recall(F1):0.25 Clarity:1.00 Precision:0.67
+
+==================================================
+Prompt: mauroscl/bug_to_user_story_v1
+==================================================
+
+Métricas Derivadas:
+  - Helpfulness: 0.93 ✓
+  - Correctness: 0.76 ✗
+
+Métricas Base:
+  - F1-Score: 0.63 ✗
+  - Clarity: 0.97 ✓
+  - Precision: 0.89 ✗
+
+--------------------------------------------------
+📊 MÉDIA GERAL: 0.8346
+--------------------------------------------------
+
+❌ STATUS: REPROVADO
+⚠️  Métricas abaixo de 0.9: correctness, f1_score, precision
+⚠️  Média atual: 0.8346 | Necessário: 0.9000
+
+==================================================
+RESUMO FINAL
+==================================================
+
+Prompts avaliados: 1
+Aprovados: 0
+Reprovados: 1
+
+⚠️  Alguns prompts não atingiram todas as métricas >= 0.9
+
+Próximos passos:
+1. Refatore os prompts com score baixo
+2. Faça push novamente: python src/push_prompts.py
+3. Execute: python src/evaluate.py novamente

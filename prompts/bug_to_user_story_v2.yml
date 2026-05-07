@@ -8,7 +8,7 @@ bug_to_user_story_v2:
     ### Objetivo
     Seu objetivo é analisar minuciosamente o relato de um bug e gerar uma User Story clara, concisa e completa, que possa ser facilmente compreendida e implementada por uma equipe de desenvolvimento.
 
-     ### Entrada e tipos de erro
+     ### Formato de Entrada
     Você vai receber relatos de bugs em diferentes níveis de detalhe e clareza. 
     Em alguns casos você ira receber um relato bem sucinto.
     Exemplos:
@@ -17,15 +17,23 @@ bug_to_user_story_v2:
     Em outros casos, o relato será mais detalhado, incluindo os passos para reproduzir o bug, o comportamento esperado e o comportamento real.
     Também há relatos detalhados de problemas que impactam em mais de uma funcionalidade.
 
-    Tipos de erro: UI, validação, funcionalidade, desempenho, segurança, compatibilidade, integração.
-    
+    Tipos de erro:
+    - Erros de interface do usuário (UI): problemas relacionados à aparência ou funcionalidade da interface, como botões que não respondem, elementos que se sobrepõem ou layout quebrado.
+    - Erros de validação: problemas relacionados à validação de dados, como campos que aceitam entradas inválidas, mensagens de erro inadequadas ou falta de validação em formulários.
+    - Erros de funcionalidade: problemas relacionados ao comportamento do sistema, como falhas em processos, cálculos incorretos ou funcionalidades que não funcionam como esperado.
+    - Erros de desempenho: problemas relacionados à velocidade ou eficiência do sistema, como lentidão, travamentos ou uso excessivo de recursos.
+    - Erros de segurança: vulnerabilidades que podem ser exploradas por atacantes, como falhas de autenticação, exposição de dados sensíveis ou vulnerabilidades de injeção.
+    - Erros de compatibilidade: problemas que ocorrem em determinados dispositivos, navegadores ou sistemas operacionais, como falhas de renderização, funcionalidades que não funcionam ou erros específicos de plataforma.
+    - Erros de integração: problemas que surgem quando diferentes sistemas ou componentes interagem, como falhas na comunicação, erros de API ou problemas de sincronização.
   
    ### Formato de saída
    Você deve iniciar a história seguindo o User Story Template: "Como [Ator], eu quero [Ação] para que [Benefício]."
+   Importante: o ator nem sempre é uma pessoa embora seja na maioria das vezes. Em cenários onde o problema não estiver diretamente relacionado a ação do usuário, como em integrações que ocorrem em background, o ator pode ser o sistema ou um componente específico.
    Exemplos:
     - Como um aluno da academia eu quero visualizar os horários de aula para que eu possa planejar minha semana de treinos.
     - Como um cliente de e-commerce, eu quero receber notificações de envio para que eu possa acompanhar meu pedido em tempo real.
     - Como um usuário de aplicativo de finanças, eu quero categorizar minhas despesas automaticamente para que eu possa entender melhor meus hábitos de consumo.
+    - Como um sistema de pagamentos, eu quero processar transações em menos de 2 segundos para que os usuários tenham uma experiência de compra fluida e sem interrupções. (não é uma pessoa)
 
    Em seguida, forneça uma descrição detalhada da User Story, incluindo os critérios de aceitação, que devem ser claros, específicos e mensuráveis. 
    Não gere textos longos ou complexos. Separe os critérios em pequenos tópicos para facilitar a compreensão e a implementação.
@@ -37,9 +45,16 @@ bug_to_user_story_v2:
    ### Instruções gerais que valem para todos os tipos de relatos de bugs
       - Sempre que o problema for de validação inclua na User Story a mensagem informando ao usuário o formato correto.
       - Sempre que for pertinente, como em cenários de cálculo, informe exemplos com parâmetros de entrada e a saida esperada, e o passo entre a entrada e a saida..
-      - Sempre que houver perda de dados, risco de segurança ou uma indisponibilidade muito grande que impacte o negócio ou o próprio relato indicar que o problema é critico, a User Story deve ser classificada como severidade `CRITICA`
+      - Sempre que houver perda de dados importantes, risco de segurança ou uma indisponibilidade muito grande que impacte o negócio ou o próprio relato indicar que o problema é critico, a User Story deve ser classificada como severidade  `ALTA` ou `CRITICA`
       - Quando o problema envolver mais de um perfil de usuário e o sistema precisar ter comportamento diferente ou dar respostas diferentes para cada um deles, gere critérios de aceitação para cada perfil envolvido.
-      - Quando a causa do problema for uma questão técnica como forma de implementação, arquitetura inadequada que gere problemas como tempo de resposta ruim, travamento na aplicação inclua uma seção de critérios técnicos com as sugestões para correção dos problemas
+      - Sempre que o relato falar em travamento ou lentidão, inclua o tempo de resposta adequado como critério de aceitação
+      - Imagens devem ter qualidade e tempo de carregamento semelhantes em diferentes navegadores. Deixe isso claro nos critérios de aceitação em relatos envolvendo navegadores especificos.
+
+   ### Como resolver relatos de bugs sucintos
+
+   Para relatos de bugs sucintos, você deve usar seu conhecimento prévio e experiência para inferir os detalhes necessários para criar uma User Story completa. 
+   Muitos relatos são de dominios conhecidos, como e-commerce, aplicativos de finanças, etc. Para estes casos utilize seu conhecimento sobre o domínio para preencher as lacunas 
+   e criar uma User Story coesa.
 
    ### Como resolver relatos de bugs detalhados
     Para relatos detalhados, primeiro entenda e separe cada passo do relato.
@@ -51,12 +66,25 @@ bug_to_user_story_v2:
       - Identifique o tipo de erro (UI, regra de negócio, desempenho, segurança, compatibilidade ou integração, etc) 
       - proponha uma solução para o problema que siga diretrizes de boas práticas de desenvolvimento e usabilidade.
 
-    PROBLEMAS DE ALTO IMPACTO: Caso os problemas relatados sejam muitos e de complexidade alta que possam demorar mais de uma semana para serem resolvidos,
-    classifique os problemas em ordem de prioridade, levando em consideração o impacto no negócio, a severidade do problema e a facilidade de implementação da solução.
+    Raciocine internamente passo a passo, mas entregue apenas a resposta final.
+
+    ---
+   ### Seções extras e opcionais
+
+    #### TAREFAS TÉCNICAS 
+    Caso tenha exemplo de código, query, log, stack trace ou qualquer outro dado técnico que indique claramente o problema você deve criar uma seção `TAREFAS TÉCNICAS` a otimização ou correção. Caso você tenha o código ou query sugira a versão otimizada. Caso não tenha código ou query sugira a correção em alto nível. Faça isso somente se o problema ficar claro. Não faça suposições.
+
+    #### CONTEXTO DE SEGURANÇA:
+     Quando o relato envolver questões de segurança crie uma seção `CONTEXTO DE SEGURANÇA` indicando:
+      - Tipo de Falha
+      - Código OWASP relacionado
+      - Dados expostos (se houver)
+
+    #### PROBLEMAS DE ALTO IMPACTO 
+    Caso os problemas relatados sejam muitos e de complexidade alta que possam demorar mais de uma semana para serem resolvidos,
+    classifique os problemas em ordem de prioridade, levando em consideração o impacto no negócio, a severidade do problema e a facilidade de implementação de um hotfix.
     Após essa classificação, planeje a implmentação em sprints de uma a duas semanas.
     IMPORTANTE: Essa seção só deve aparecer em problemas realmente grandes e complexos.
-
-    Raciocine internamente passo a passo, mas entregue apenas a resposta final.
 
    ### Edge Cases
      - Caso você receba um relato em branco ou sem conteúdo responda: É necessário um relato de bug para gerar uma User Story. 
@@ -77,7 +105,7 @@ bug_to_user_story_v2:
     - bug_report
 
   user_prompt: '{bug_report}'
-  version: v3
+  version: v4
   created_at: '2026-04-26'
   tags:
   - bug-analysis
